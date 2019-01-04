@@ -1,31 +1,32 @@
 # coding: utf-8
-
 from setuptools import setup
-import os
 
-README = os.path.join(os.path.dirname(__file__), 'README.rst')
-
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(name='mqtt-sentinel',
-      version='0.1',
+      version='0.2.1',
       description='Integration between MQTT and custom notification services.',
       url='https://github.com/caiovictormc/mqtt-sentinel',
       author='caiovictormc',
       author_email='caiovictormc@gmail.com',
       license='MIT',
       packages=['sentinel'],
-      install_requires=[],
-      long_description=open(README).read(),
+      install_requires=[
+        'paho-mqtt>=1.4.0'
+      ],
+      long_description=long_description,
+      long_description_content_type="text/markdown",
       include_package_data=True,
       classifiers=[
-        'Development Status :: 1 - Alpha',
-        'License :: MIT License',
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.7',
-        'MQTT :: Notification :: Homie',
+        'Topic :: System :: Networking :: Monitoring'
       ],
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
       entry_points={
-        'console_scripts': ['msentinel=sentinel.command_line:main']
+        'console_scripts': ['mqtt_sentinel=sentinel.command_line:main']
       },
       zip_safe=False)

@@ -1,2 +1,0 @@
-def starting():
-    print("Starting")
