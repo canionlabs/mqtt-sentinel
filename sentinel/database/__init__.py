@@ -1,1 +1,1 @@
-from .manager import DBManager
+from .service_manager import DBManager, manager
