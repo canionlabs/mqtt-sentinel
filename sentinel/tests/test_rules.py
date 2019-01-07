@@ -28,3 +28,9 @@ def test_rule_represetation(homie_info):
     )
     assert homie_rule.operator == operator_type
     assert homie_rule.equated == equated_value
+
+
+def test_rule_default_operation(homie_info):
+    homie_rule = HomieRule(**homie_info)
+    assert homie_rule.operator == "!="
+    assert homie_rule.equated == ""
