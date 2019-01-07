@@ -13,7 +13,7 @@ def sqlite_action(action):
     return _mod
 
 
-class SQlite3(BaseService):
+class SQLite3(BaseService):
     def __init__(self, database):
         self.database = self._set_db(database)
         self.conn = None
