@@ -1,4 +1,5 @@
-from .postgres import PostgresService
+# from .postgres import PostgresService
+from .sqlite3 import SQlite3
 
 
-DB_LIST = [PostgresService]
+DB_LIST = [SQlite3]
