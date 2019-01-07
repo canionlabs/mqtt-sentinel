@@ -40,12 +40,23 @@ class SQlite3(BaseService):
                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     topic TEXT NOT NULL,
                     operator TEXT NOT NULL,
-                    equated TEXT NOT NULL
+                    equated TEXT NULL
                 );
             """)
         except sqlite3.OperationalError as e:
             # print error log
             print(e)
+
+    @sqlite_action
+    def add_rule(self, rule):
+        import pdb; pdb.set_trace
+        self.cursor.execute(f"""
+            INSERT INTO rules (
+                topic, operator, equated
+            ) VALUES (
+                "{rule.topic}", "{rule.operator}", "{rule.equated}"
+            )
+        """)
 
     def __call__(self, database):
         self._set_db(database)

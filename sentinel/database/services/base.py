@@ -1,5 +1,8 @@
 class BaseService:
 
+    def add_rule(self, url):
+        raise NotImplementedError()
+
     @classmethod
     def _check_url(cls, url):
         raise NotImplementedError()
