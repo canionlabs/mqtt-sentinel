@@ -49,7 +49,6 @@ class SQLite3(BaseService):
 
     @sqlite_action
     def add_rule(self, rule):
-        import pdb; pdb.set_trace
         self.cursor.execute(f"""
             INSERT INTO rules (
                 topic, operator, equated
