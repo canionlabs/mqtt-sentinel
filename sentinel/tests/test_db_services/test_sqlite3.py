@@ -32,5 +32,5 @@ def test_create_the_rule_table(db_service):
     assert len(results) > 0
 
 
-def test_add_rules(db_service):
-    db_service.add_rule()
+# def test_add_rules(db_service):
+#     db_service.add_rule()
