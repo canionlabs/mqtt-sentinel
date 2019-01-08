@@ -1,6 +1,6 @@
 from sentinel.database import manager
 from sentinel.database.services import SQLite3
-from sentinel.rules import HomieRule
+from sentinel.rules import HomieRule, RuleDBObject
 
 import pytest
 
@@ -56,3 +56,15 @@ def test_add_rules(db_service, rule):
     """)
     result = query.fetchone()
     assert (rule.topic, rule.operator, rule.equated) == result
+
+
+def test_get_rules(db_service, rule):
+    db_service.add_rule(rule)
+    rules = db_service.get_rules()
+
+    assert type(rules) is list
+    for r in rules:
+        assert isinstance(r, RuleDBObject)
+        assert r.topic == rule.topic
+        assert r.operator == rule.operator
+        assert r.equated == rule.equated
