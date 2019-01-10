@@ -17,22 +17,31 @@ class WatcherWorker:
         self.mqtt_client.connect(host, port, keepalive)
 
     def start(self):
-        self.mqtt_client.loop_forever()
+        self._start_thread()
 
     def add_rule(self, rule):
+        self._stop_thread()
         self.rules.append(
             {rule.topic: rule}
         )
         self._subscribe(rule.topic)
+        self._start_thread()
 
     def on_message(self, mqttc, userdata, msg):
         raise NotImplementedError()
 
     def is_avaliable(self):
-        return len(self.subscribed_topics) >= self.max_topics
+        return len(self.subscribed_topics) < self.max_topics
 
     def _subscribe(self, topic):
         self.subscribed_topics.append(str(topic))
+        self.mqtt_client.subscribe(topic)
+
+    def _start_thread(self):
+        self.mqtt_client.loop_start()
+
+    def _stop_thread(self):
+        self.mqtt_client.loop_stop()
 
 
 class WatcherPool:
