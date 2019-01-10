@@ -1,5 +1,5 @@
 from sentinel.rules import RuleDBObject
-from sentinel.watcher import WatcherPool, WatcherWorker, MQTTWatcher
+from sentinel.watcher import WatcherPool, WatcherWorker
 
 from unittest.mock import Mock
 
@@ -13,14 +13,6 @@ import uuid
 def mqtt_rule():
     rule = RuleDBObject(topic=str(uuid.uuid4()), operator="!=", equated="")
     return rule
-
-
-# @pytest.fixture
-# def mqtt_watcher():
-#     rule = RuleDBObject(topic=str(uuid.uuid4()), operator="!=", equated="")
-#     watcher = MQTTWatcher()
-#     watcher.watch_rule(rule)
-#     return watcher
 
 
 @pytest.fixture
@@ -66,57 +58,18 @@ def test_worker_availability(monkeypatch, mock_mqttc, mqtt_rule):
     for i in range(1, 15):
         mqtt_rule.topic = str(uuid.uuid4())
         worker.add_rule(mqtt_rule)
-        if i < 10:
-            assert worker.is_avaliable()
+        if i <= 10:
+            assert worker.is_available()
         else:
-            assert not worker.is_avaliable()
+            assert not worker.is_available()
 
 
-# def test_pool_creation(monkeypatch):
-#     Mock
+def test_pool_worker_acquire():
+    pool = WatcherPool()
+    worker = pool.acquire()
+    assert isinstance(worker, WatcherWorker)
 
-
-
-# def test_watcher_worker_mocker(mocker):
-#     with mocker.patch()
-
-    # with mocker.patch('sentinel.watcher.workers.paho.mqtt.client.Client') as paho_mocker:
-    #     host = 'localhost'
-    #     port = 1883
-    #     keepalive = 60
-    #     paho_mocker.return_value.connect.return_value = "teste"
-    #     import pdb; pdb.set_trace()
-    #     # paho_mocker.return_value = helpers.init_mock_mqtt()
-
-    #     watcher = WatcherWorker()
-    #     watcher.connect(host, port, keepalive)
-    #     watcher.start()
-    # import pdb; pdb.set_trace()
-    # paho_mocker.connect.assert_called_with()
-
-
-# def test_mqtt_watcher_rule(mqtt_rule, mocker):
-#     with mocker.patch('sentinel.watcher.WatcherPool') as pool_mock:
-#         watcher = MQTTWatcher()
-#         pool_mock.acquire.return_value = True
-#         watcher.watch_rule(mqtt_rule)
-#         # pool_mock.acquire.assert_called_with()
-
-#     # pool = watcher._pool
-#     # assert isinstance(pool, WatcherPool)
-#     # assert len(pool._worker_list) >= 1
-
-
-# def test_mqtt_watcher_worker_subscribe_topic(mqtt_rule):
-#     watcher = MQTTWatcher()
-#     watcher.watch_rule(mqtt_rule)
-
-#     worker_list = watcher._pool._worker_list
-#     for worker in worker_list:
-#         assert mqtt_rule.topic in worker.subscribed_topics
-
-
-# def test_mqtt_watcher_worker_is_avaliable(mqtt_watcher):
-#     worker_list = mqtt_watcher._pool._worker_list
-#     for worker in worker_list:
-#         assert worker.is_avaliable
+    # Forcing worker to change availability
+    worker.max_topics = -10
+    new_worker = pool.acquire()
+    assert id(worker) != id(new_worker)
