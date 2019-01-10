@@ -1,5 +1,6 @@
 # coding: utf-8
 import paho.mqtt.client as mqtt
+from sentinel.database import manager
 
 
 class MQTTClient:
@@ -25,13 +26,14 @@ class MQTTClient:
 
 
 class Sentinel:
-    def __init__():
-        """
-        """
-        pass
+    def __init__(self):
+        self.db_url = None
+        self.db = None
 
-    def config():
-        """
-        Create a MQTTClient using a config file
-        """
-        pass
+    def db_config(self, db_url):
+        self.set_db(db_url)
+
+    def set_db(self, db_url):
+        self.db = manager(db_url)
+        self.db_url = db_url
+        self.db.migrate()
