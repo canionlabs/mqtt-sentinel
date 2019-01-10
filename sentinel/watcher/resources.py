@@ -31,7 +31,7 @@ class WatcherWorker:
         raise NotImplementedError()
 
     def is_available(self):
-        return len(self.subscribed_topics) <= self.max_topics
+        return len(self.subscribed_topics) < self.max_topics
 
     def _subscribe(self, topic):
         self.subscribed_topics.append(str(topic))

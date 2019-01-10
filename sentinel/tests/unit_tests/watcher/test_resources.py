@@ -58,7 +58,7 @@ def test_worker_availability(monkeypatch, mock_mqttc, mqtt_rule):
     for i in range(1, 15):
         mqtt_rule.topic = str(uuid.uuid4())
         worker.add_rule(mqtt_rule)
-        if i <= 10:
+        if i < 10:
             assert worker.is_available()
         else:
             assert not worker.is_available()
