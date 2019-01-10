@@ -2,7 +2,7 @@
 from .resources import WatcherPool
 
 
-class MQTTWatcher:
+class Watcher:
     def __init__(self):
         self._pool = WatcherPool()
         self.username = None
