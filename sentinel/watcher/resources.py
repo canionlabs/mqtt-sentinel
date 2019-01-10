@@ -30,7 +30,7 @@ class WatcherWorker:
     def on_message(self, mqttc, userdata, msg):
         raise NotImplementedError()
 
-    def is_avaliable(self):
+    def is_available(self):
         return len(self.subscribed_topics) < self.max_topics
 
     def _subscribe(self, topic):
@@ -48,15 +48,15 @@ class WatcherPool:
     def __init__(self):
         self._worker_list = []
 
-    def _get_avaliable_worker(self):
+    def _get_available_worker(self):
         for worker in self._worker_list:
-            if worker.is_avaliable:
+            if worker.is_available:
                 return worker
         return self._new_worker()
 
     def _new_worker(self):
         self._worker_list.append(WatcherWorker())
-        return self._get_avaliable_worker()
+        return self._get_available_worker()
 
     def acquire(self):
-        return self._get_avaliable_worker()
+        return self._get_available_worker()

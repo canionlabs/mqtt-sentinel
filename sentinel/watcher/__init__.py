@@ -1,2 +1,2 @@
 from .watcher import MQTTWatcher
-from .workers import WatcherPool, WatcherWorker
+from .resources import WatcherPool, WatcherWorker

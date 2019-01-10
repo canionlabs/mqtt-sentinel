@@ -1,5 +1,5 @@
 # coding: utf-8
-from .workers import WatcherPool
+from .resources import WatcherPool
 
 
 class MQTTWatcher:
