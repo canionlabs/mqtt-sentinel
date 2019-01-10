@@ -3,13 +3,13 @@ from .resources import WatcherPool
 
 
 class Watcher:
-    def __init__(self):
+    def __init__(self, host="localhost", port=1883, keepalive=60):
         self._pool = WatcherPool()
         self.username = None
         self.password = None
-        self.host = "localhost"
-        self.port = 1883
-        self.keepalive = 60
+        self.host = host
+        self.port = port
+        self.keepalive = keepalive
 
     def set_auth(self, username, password):
         self.username = username
