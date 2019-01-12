@@ -1,3 +1,4 @@
+# coding: utf-8
 class Singleton(type):
     """
     Based on https://sourcemaking.com/design_patterns/singleton/python/1
@@ -13,9 +14,7 @@ class Singleton(type):
         return cls._instance
 
 
-class OutputSettings(metaclass=Singleton):
+class Settings(metaclass=Singleton):
     def __init__(self):
-        self.output = None
-
-    def send(self, mqtt_msg, payload):
-        self.output.send(mqtt_msg, payload)
+        self.output_service = None
+        self.db_service = None
