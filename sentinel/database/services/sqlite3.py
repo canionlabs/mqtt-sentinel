@@ -8,9 +8,11 @@ import sqlite3
 def sqlite_action(action):
     @wraps(action)
     def _mod(self, *method_args, **method_kwargs):
+        self._connect()
         self._open()
         value_return = action(self, *method_args, **method_kwargs)
         self._commit()
+        self._close()
         return value_return
     return _mod
 
@@ -20,7 +22,6 @@ class SQLite3(BaseService):
         self.database = self._set_db(database)
         self.conn = None
         self.cursor = None
-        self._connect()
 
     def _connect(self):
         self.conn = sqlite3.connect(self.database)
@@ -31,7 +32,7 @@ class SQLite3(BaseService):
     def _commit(self):
         self.conn.commit()
 
-    def close(self):
+    def _close(self):
         self.conn.close()
 
     @sqlite_action
@@ -68,6 +69,17 @@ class SQLite3(BaseService):
         results = query.fetchall()
         for result in results:
             rules.append(RuleDBObject(*result))
+        return rules
+
+    @sqlite_action
+    def get_topics(self):
+        rules = []
+        query = self.cursor.execute("""
+            SELECT topic FROM rules;
+        """)
+        results = query.fetchall()
+        for result in results:
+            rules.append(result[0])
         return rules
 
     def __call__(self, database):
