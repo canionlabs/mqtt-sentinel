@@ -1,10 +1,13 @@
 # coding: utf-8
 from .resources import WatcherPool
+from sentinel import settings
+
+import logging
 
 
 class Watcher:
     def __init__(self, host="localhost", port=1883, keepalive=60):
-        self._pool = WatcherPool()
+        self.pool = WatcherPool()
         self.username = None
         self.password = None
         self.host = host
@@ -15,13 +18,28 @@ class Watcher:
         self.username = username
         self.password = password
 
-    def watch_rule(self, rule):
-        worker = self._pool.acquire()
-        if self.username:
-            worker.set_auth(self.username, self.password)
+    def run(self):
+        db = settings.db_service
+        for topic in db.get_topics():
+            worker = self.pool.acquire()
+            if self.username:
+                worker.set_auth(self.username, self.password)
 
-        if not worker.rules:
-            worker.connect(self.host, self.port, self.keepalive)
+            if not worker.subscribed_topics:
+                worker.connect(self.host, self.port, self.keepalive)
+                worker.subscribe(topic)
+            else:
+                worker.stop()
+                worker.subscribe(topic)
             worker.start()
+        logging.warning(
+            f'Starting my watch with {len(self.pool.worker_list)} workers')
+        try:
+            while True:
+                pass
 
-        worker.add_rule(rule)
+        except KeyboardInterrupt:
+            pass
+
+        finally:
+            logging.warning('Closing...')
