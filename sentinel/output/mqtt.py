@@ -27,10 +27,10 @@ class OutMQTT:
                 qos=self.qos, hostname=self.host
             )
 
-    def send(self, mqtt_msg, rule):
+    def send(self, msg, rule):
         payload_msg = (
-            f"The value {mqtt_msg.payload} has been received in the" +
-            f"topic {mqtt_msg.topic}. " +
+            f"The value {msg} has been received in the" +
+            f"topic {rule.topic}. " +
             f"Rule: value {rule.operator} {rule.equated}"
         )
         self.publish(payload_msg)
