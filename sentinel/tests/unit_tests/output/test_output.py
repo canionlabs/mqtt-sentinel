@@ -1,4 +1,5 @@
-from sentinel.output import OutputSettings, output
+from sentinel.settings import Settings
+from sentinel import settings
 from sentinel.output.mqtt import OutMQTT
 from sentinel.rules import RuleDBObject
 
@@ -31,17 +32,17 @@ def mqtt_rule():
     return rule
 
 
-def test_output_settings_is_a_singleton():
-    output_a = OutputSettings()
-    output_b = OutputSettings()
-    assert output_a is output_b
+def test_settings_is_a_singleton():
+    settings_a = Settings()
+    settings_b = Settings()
+    assert settings_a is settings_b
 
 
 def test_output_service_mqtt(mocker, mqtt_rule, mock_msg):
     omqtt = OutMQTT()
-    output.output = omqtt
+    settings.output_service = omqtt
     patcher = mocker.patch('paho.mqtt.publish.single')
-    output.send(mock_msg, mqtt_rule)
+    settings.output_service.send(mock_msg, mqtt_rule)
     psingle_call = patcher.call_args_list[0][1]
     assert (
         psingle_call['hostname'] == omqtt.host and
@@ -52,9 +53,9 @@ def test_output_service_mqtt(mocker, mqtt_rule, mock_msg):
 
 def test_output_service_mqtt_with_auth(mocker, mqtt_rule, mock_msg):
     omqtt = OutMQTT(username=str(uuid.uuid4()), password=str(uuid.uuid4))
-    output.output = omqtt
+    settings.output_service = omqtt
     patcher = mocker.patch('paho.mqtt.publish.single')
-    output.send(mock_msg, mqtt_rule)
+    settings.output_service.send(mock_msg, mqtt_rule)
     psingle_call = patcher.call_args_list[0][1]
     assert (
         psingle_call['hostname'] == omqtt.host and

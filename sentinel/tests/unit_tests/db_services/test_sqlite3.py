@@ -14,10 +14,7 @@ DB_NAME = ':memory:'
 @pytest.fixture(scope="module")
 def db_service(request):
     db = manager(f"sqlite://{DB_NAME}")
-
-    def fin():
-        db.close()
-    request.addfinalizer(fin)
+    db.connect()
     return db
 
 
@@ -48,6 +45,7 @@ def test_create_the_rule_table(db_service):
 
 
 def test_add_rules(db_service, rule):
+    db_service.migrate()
     db_service.add_rule(rule)
 
     cursor = db_service.conn.cursor()
