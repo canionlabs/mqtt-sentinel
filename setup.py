@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='mqtt-sentinel',
-      version='0.2.1',
+      version='0.5.0',
       description='Integration between MQTT and custom notification services.',
       url='https://github.com/caiovictormc/mqtt-sentinel',
       author='caiovictormc',
@@ -13,7 +13,9 @@ setup(name='mqtt-sentinel',
       license='MIT',
       packages=['sentinel'],
       install_requires=[
-        'paho-mqtt>=1.4.0'
+        'paho-mqtt>=1.4.0',
+        'PyInquirer==1.0.3',
+        'prompt_toolkit==1.0.14'
       ],
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -27,6 +29,6 @@ setup(name='mqtt-sentinel',
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
       entry_points={
-        'console_scripts': ['mqtt_sentinel=sentinel.command_line:main']
+        'console_scripts': ['msentinel=sentinel.command_line:main']
       },
       zip_safe=False)

@@ -38,16 +38,17 @@ def test_create_worker_and_add_a_rule(monkeypatch, mock_mqttc, mqtt_rule):
     monkeypatch.setattr(
         'paho.mqtt.client.Client', MQTT_MOCK
     )
+    topic = str(uuid.uuid4())
+
     worker = WatcherWorker()
     worker.connect('localhost', 1883, 60)
     worker.start()
-    worker.add_rule(mqtt_rule)
-    mock_mqttc.loop_stop.assert_called_with()
-    mock_mqttc.subscribe.assert_called_once_with(mqtt_rule.topic)
+    worker.subscribe(topic)
+    mock_mqttc.subscribe.assert_called_once_with(topic)
     mock_mqttc.loop_start.assert_called_with()
 
 
-def test_worker_availability(monkeypatch, mock_mqttc, mqtt_rule):
+def test_worker_availability(monkeypatch, mock_mqttc):
     MQTT_MOCK = Mock(return_value=mock_mqttc)
     monkeypatch.setattr(
         'paho.mqtt.client.Client', MQTT_MOCK
@@ -56,8 +57,8 @@ def test_worker_availability(monkeypatch, mock_mqttc, mqtt_rule):
     worker.connect('localhost', 1883, 60)
     worker.start()
     for i in range(1, 15):
-        mqtt_rule.topic = str(uuid.uuid4())
-        worker.add_rule(mqtt_rule)
+        topic = str(uuid.uuid4())
+        worker.subscribe(topic)
         if i < 10:
             assert worker.is_available()
         else:

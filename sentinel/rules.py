@@ -11,6 +11,23 @@ class RuleDBObject:
         self.equated = equated
 
 
+class Rule:
+    """
+    Rule Object used to represent DB Rules received from Database
+    """
+    def __init__(self, topic, operator="!=", equated=""):
+        self.topic = topic
+        self.operator = operator
+        self.equated = equated
+
+    def set_operation(self, operator, equated):
+        self.operator = operator or '!='
+        self.equated = equated or ''
+
+    def __str__(self):
+        return f'{self.topic}, {self.operation}, {self.equated}'
+
+
 class HomieRule:
     """
     Rule object based in the protocol MQTT using the Homie Convention

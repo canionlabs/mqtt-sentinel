@@ -7,10 +7,14 @@ import sqlite3
 
 def sqlite_action(action):
     @wraps(action)
-    def _mod(self, *method_args, **method_kwargs):
+    def _mod(self, *args, **kwargs):
+        if not self.is_memory():
+            self._connect()
         self._open()
-        value_return = action(self, *method_args, **method_kwargs)
+        value_return = action(self, *args, **kwargs)
         self._commit()
+        if not self.is_memory():
+            self._close()
         return value_return
     return _mod
 
@@ -20,6 +24,8 @@ class SQLite3(BaseService):
         self.database = self._set_db(database)
         self.conn = None
         self.cursor = None
+
+    def connect(self):
         self._connect()
 
     def _connect(self):
@@ -31,8 +37,11 @@ class SQLite3(BaseService):
     def _commit(self):
         self.conn.commit()
 
-    def close(self):
+    def _close(self):
         self.conn.close()
+
+    def is_memory(self):
+        return ':memory:' == self.database
 
     @sqlite_action
     def migrate(self):
@@ -68,6 +77,17 @@ class SQLite3(BaseService):
         results = query.fetchall()
         for result in results:
             rules.append(RuleDBObject(*result))
+        return rules
+
+    @sqlite_action
+    def get_topics(self):
+        rules = []
+        query = self.cursor.execute("""
+            SELECT topic FROM rules;
+        """)
+        results = query.fetchall()
+        for result in results:
+            rules.append(result[0])
         return rules
 
     def __call__(self, database):

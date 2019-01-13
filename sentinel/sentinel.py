@@ -1,39 +1,31 @@
 # coding: utf-8
-import paho.mqtt.client as mqtt
 from sentinel.database import manager
-
-
-class MQTTClient:
-    def __init__(self, host, port, keepalive, username=None, password=None):
-        self.host = host
-        self.port = port or 1883
-        self.keepalive = keepalive
-        self.username = username
-        self.password = password
-
-        self._mqttc = mqtt.Client()
-        self._set_credencials()
-
-    def _set_credencials(self):
-        if self.username:
-            if self.password:
-                self._mqttc.username_pw_set(self.username, self.password)
-            else:
-                self._mqttc.username_pw_set(self.username)
-
-    def connect(self):
-        self._mqttc.connect(self.host, self.port, self.keepalive)
+from sentinel.watcher import Watcher
+from sentinel import settings
 
 
 class Sentinel:
     def __init__(self):
-        self.db_url = None
         self.db = None
+        self.watcher = Watcher()
 
-    def db_config(self, db_url):
-        self.set_db(db_url)
+    def set_output(self, output_service):
+        settings.output_service = output_service
 
     def set_db(self, db_url):
         self.db = manager(db_url)
-        self.db_url = db_url
         self.db.migrate()
+        settings.db_service = self.db
+
+    def add_rule(self, mqtt_rule):
+        self.db.add_rule(mqtt_rule)
+
+    def start(self):
+        self._checkup()
+        self.watcher.run()
+
+    def _checkup(self):
+        if not settings.output_service:
+            raise NameError("Output service is not found")
+        if not settings.db_service:
+            raise NameError("DB service is not found")
