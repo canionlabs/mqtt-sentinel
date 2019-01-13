@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='mqtt-sentinel',
-      version='0.2.1',
+      version='0.5.0',
       description='Integration between MQTT and custom notification services.',
       url='https://github.com/caiovictormc/mqtt-sentinel',
       author='caiovictormc',
