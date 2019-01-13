@@ -6,18 +6,19 @@ import threading
 
 
 def operation(value, operator, equated):
-        if operator == "==":
-            return value == equated
-        if operator == ">=":
-            return value >= equated
-        if operator == "<=":
-            return value <= equated
-        if operator == "<":
-            return value < equated
-        if operator == ">":
-            return value > equated
-        if operator == "!=":
-            return value != equated
+    value = value.decode("utf-8")
+    if operator == "==":
+        return value == equated
+    if operator == ">=":
+        return value >= equated
+    if operator == "<=":
+        return value <= equated
+    if operator == "<":
+        return value < equated
+    if operator == ">":
+        return value > equated
+    if operator == "!=":
+        return value != equated
 
 
 def processor(topic, msg):
