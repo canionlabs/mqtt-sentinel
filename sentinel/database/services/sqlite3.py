@@ -1,8 +1,8 @@
-from .base import BaseService
-from sentinel.rules import RuleDBObject
-
-from functools import wraps
 import sqlite3
+from functools import wraps
+
+from sentinel.rules import RuleDBObject
+from .base import BaseService
 
 
 def sqlite_action(action):
@@ -78,6 +78,16 @@ class SQLite3(BaseService):
         for result in results:
             rules.append(RuleDBObject(*result))
         return rules
+
+    @sqlite_action
+    def this_rule_exists(self, rule):
+        params = (rule.topic, rule.operator, rule.equated)
+        query = self.cursor.execute("""
+            SELECT topic, operator, equated FROM rules
+            WHERE topic=? AND operator=? AND equated=?;
+        """, params)
+        results = len(query.fetchall())
+        return bool(results)
 
     @sqlite_action
     def get_topics(self):
