@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 import click
+import configparser
 
 from PyInquirer import style_from_dict, Token, prompt
 
@@ -13,9 +14,37 @@ def ordinary():
     pass
 
 
-@ordinary.command()
-def run():
-    """Run sentinel"""
+@ordinary.command('run', short_help='Run sentinel using a config file')
+@click.option('--config', '-c', required=True, type=click.Path())
+def start_run(config):
+    ALLOWED_OUTPUTS = {'output:mqtt': OutMQTT}
+
+    cfg_parse = configparser.ConfigParser()
+    cfg_parse.read(config)
+    cfg = {key: value for key, value in cfg_parse.items()}
+
+    settings_mqtt = {}
+    if cfg.get('settings:mqtt'):
+        settings_mqtt = {
+            key: value for key, value in cfg['settings:mqtt'].items()}
+
+    settings_rules = {}
+    if cfg.get('settings:rules'):
+        settings_rules = {
+            key: value for key, value in cfg['settings:rules'].items()}
+
+    output = None
+    for output_alias, output_cls in ALLOWED_OUTPUTS.items():
+        if cfg.get(output_alias):
+            settings_output = {
+                key: value for key, value in cfg[output_alias].items()}
+            output = output_cls(**settings_output)
+            break
+
+    sentinel = Sentinel(**settings_mqtt)
+    sentinel.set_db(**settings_rules)
+    sentinel.set_output(output)
+    sentinel.start()
 
 
 @click.group()
