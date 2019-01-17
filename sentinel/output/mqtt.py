@@ -3,13 +3,13 @@ import paho.mqtt.publish as publish
 
 
 class OutMQTT:
-    def __init__(self, host='localhost', port=1883,
-                 topic='notifications/', qos=0,
-                 username='', password=''):
+    def __init__(self, host='localhost', port=1883, topic='notifications/',
+                 qos=0, keepalive=60, username=None, password=None):
         self.host = host
-        self.port = port
+        self.port = int(port)
         self.topic = topic
-        self.qos = qos
+        self.qos = int(qos)
+        self.keepalive = int(keepalive)
         self.auth = {
             'username': username,
             'password': password
@@ -18,12 +18,12 @@ class OutMQTT:
     def publish(self, payload):
         if self.auth['username']:
             publish.single(
-                topic=self.topic, payload=payload,
+                topic=self.topic, payload=payload, keepalive=self.keepalive,
                 qos=self.qos, hostname=self.host, auth=self.auth
             )
         else:
             publish.single(
-                topic=self.topic, payload=payload,
+                topic=self.topic, payload=payload, keepalive=self.keepalive,
                 qos=self.qos, hostname=self.host
             )
 

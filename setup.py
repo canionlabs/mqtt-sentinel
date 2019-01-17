@@ -29,6 +29,6 @@ setup(name='mqtt-sentinel',
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
       entry_points={
-        'console_scripts': ['msentinel=sentinel.command_line:main']
+        'console_scripts': ['msentinel=sentinel.cli:cli']
       },
       zip_safe=False)

@@ -1,5 +1,5 @@
 from sentinel.watcher import Watcher
-from sentinel.rules import RuleDBObject
+from sentinel.rules import Rule
 
 import paho.mqtt.client as mqttc
 import pytest
@@ -13,7 +13,7 @@ CONNECT_DEFAULT_ARGS = ('localhost', 1883, 60)
 
 @pytest.fixture
 def mqtt_rule():
-    rule = RuleDBObject(topic=str(uuid.uuid4()), operator="!=", equated="")
+    rule = Rule(topic=str(uuid.uuid4()), operator="!=", equated="")
     return rule
 
 

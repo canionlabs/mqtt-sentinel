@@ -11,8 +11,8 @@ class Watcher:
         self.username = None
         self.password = None
         self.host = host
-        self.port = port
-        self.keepalive = keepalive
+        self.port = int(port)
+        self.keepalive = int(keepalive)
 
     def set_auth(self, username, password):
         self.username = username

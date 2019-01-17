@@ -1,6 +1,6 @@
 from sentinel.database import manager
 from sentinel.database.services import SQLite3
-from sentinel.rules import HomieRule, RuleDBObject
+from sentinel.rules import Rule
 
 import pytest
 
@@ -25,7 +25,7 @@ def random_string():
 
 @pytest.fixture(scope="module")
 def rule(request):
-    rule = HomieRule(random_string(), random_string(), random_string())
+    rule = Rule(random_string(), random_string(), random_string())
     return rule
 
 
@@ -62,7 +62,7 @@ def test_get_rules(db_service, rule):
 
     assert type(rules) is list
     for r in rules:
-        assert isinstance(r, RuleDBObject)
+        assert isinstance(r, Rule)
         assert r.topic == rule.topic
         assert r.operator == rule.operator
         assert r.equated == rule.equated
