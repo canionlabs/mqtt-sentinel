@@ -6,10 +6,10 @@ class OutMQTT:
     def __init__(self, host='localhost', port=1883, topic='notifications/',
                  qos=0, keepalive=60, username=None, password=None):
         self.host = host
-        self.port = port
+        self.port = int(port)
         self.topic = topic
-        self.qos = qos
-        self.keepalive = keepalive
+        self.qos = int(qos)
+        self.keepalive = int(keepalive)
         self.auth = {
             'username': username,
             'password': password
