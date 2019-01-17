@@ -14,6 +14,25 @@ def ordinary():
     pass
 
 
+@ordinary.command('list', short_help='List the registered rules')
+@click.option('--config', '-c', required=True, type=click.Path())
+def list_rule(config):
+    cfg_parse = configparser.ConfigParser()
+    cfg_parse.read(config)
+    cfg = {key: value for key, value in cfg_parse.items()}
+
+    settings_rules = {}
+    if cfg.get('settings:rules'):
+        settings_rules = {
+            key: value for key, value in cfg['settings:rules'].items()}
+
+    sentinel = Sentinel()
+    sentinel.set_db(**settings_rules)
+    rules = sentinel.list_rules()
+    for rule in rules:
+        click.echo(click.style(f'> {rule}', fg='green'))
+
+
 @ordinary.command('add', short_help='Create a new rules')
 @click.option('--config', '-c', required=True, type=click.Path())
 @click.option('--topic', '-t', required=True)

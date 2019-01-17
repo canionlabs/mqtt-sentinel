@@ -1,6 +1,8 @@
 import sqlite3
 from functools import wraps
 
+import click
+
 from sentinel.rules import Rule
 from .base import BaseService
 
@@ -55,8 +57,8 @@ class SQLite3(BaseService):
                 );
             """)
         except sqlite3.OperationalError as e:
-            # print error log
-            print(e)
+            click.echo(
+                click.style(f'** {self.__class__.__name__}: {e}', fg='blue'))
 
     @sqlite_action
     def add_rule(self, rule):
