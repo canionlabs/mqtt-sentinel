@@ -14,6 +14,27 @@ def ordinary():
     pass
 
 
+@ordinary.command('add', short_help='Create a new rules')
+@click.option('--config', '-c', required=True, type=click.Path())
+@click.option('--topic', '-t', required=True)
+@click.option('--operator', '-o', required=True)
+@click.option('--equated', '-e', required=True)
+def add_rule(config, topic, operator, equated):
+    cfg_parse = configparser.ConfigParser()
+    cfg_parse.read(config)
+    cfg = {key: value for key, value in cfg_parse.items()}
+
+    settings_rules = {}
+    if cfg.get('settings:rules'):
+        settings_rules = {
+            key: value for key, value in cfg['settings:rules'].items()}
+
+    rule = Rule(topic=topic, operator=operator, equated=equated)
+    sentinel = Sentinel()
+    sentinel.set_db(**settings_rules)
+    sentinel.add_rule(rule)
+
+
 @ordinary.command('run', short_help='Run sentinel using a config file')
 @click.option('--config', '-c', required=True, type=click.Path())
 def start_run(config):
