@@ -1,7 +1,7 @@
 from sentinel.settings import Settings
 from sentinel import settings
 from sentinel.output.mqtt import OutMQTT
-from sentinel.rules import RuleDBObject
+from sentinel.rules import Rule
 
 import paho.mqtt.publish as publish
 import pytest
@@ -28,7 +28,7 @@ def mock_msg():
 
 @pytest.fixture
 def mqtt_rule():
-    rule = RuleDBObject(TOPIC_NAME)
+    rule = Rule(TOPIC_NAME)
     return rule
 
 

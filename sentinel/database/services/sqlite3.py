@@ -1,7 +1,7 @@
 import sqlite3
 from functools import wraps
 
-from sentinel.rules import RuleDBObject
+from sentinel.rules import Rule
 from .base import BaseService
 
 
@@ -76,7 +76,7 @@ class SQLite3(BaseService):
         """)
         results = query.fetchall()
         for result in results:
-            rules.append(RuleDBObject(*result))
+            rules.append(Rule(*result))
         return rules
 
     @sqlite_action

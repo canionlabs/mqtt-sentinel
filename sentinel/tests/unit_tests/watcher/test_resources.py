@@ -1,4 +1,4 @@
-from sentinel.rules import RuleDBObject
+from sentinel.rules import Rule
 from sentinel.watcher import WatcherPool, WatcherWorker
 
 from unittest.mock import Mock
@@ -11,7 +11,7 @@ import uuid
 
 @pytest.fixture
 def mqtt_rule():
-    rule = RuleDBObject(topic=str(uuid.uuid4()), operator="!=", equated="")
+    rule = Rule(topic=str(uuid.uuid4()), operator="!=", equated="")
     return rule
 
 
