@@ -1,6 +1,6 @@
 from sentinel.database import manager
 from sentinel.database.services import SQLite3
-from sentinel.rules import HomieRule, Rule
+from sentinel.rules import Rule
 
 import pytest
 
@@ -25,7 +25,7 @@ def random_string():
 
 @pytest.fixture(scope="module")
 def rule(request):
-    rule = HomieRule(random_string(), random_string(), random_string())
+    rule = Rule(random_string(), random_string(), random_string())
     return rule
 
 
