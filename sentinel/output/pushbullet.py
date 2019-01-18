@@ -45,7 +45,7 @@ class Pushbullet:
 
         r = requests.post(
             'https://api.pushbullet.com/v2/pushes',
-            header={'Access-Token': self._access_token},
+            headers={'Access-Token': self._access_token},
             json={
                 'title': self._title, 'body': message, 'type': 'note'
             })
