@@ -6,7 +6,9 @@ Integration between MQTT and services using custom rules. Based on the awesome p
 
 #### Installation
 
-....
+```
+pip install mqtt-sentinel
+```
 
 ### Getting started
 
