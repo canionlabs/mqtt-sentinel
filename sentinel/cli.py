@@ -6,7 +6,7 @@ from PyInquirer import style_from_dict, Token, prompt
 
 from sentinel import Sentinel
 from sentinel.rules import Rule
-from sentinel.output import OutMQTT
+from sentinel.output import OutMQTT, Pushbullet
 
 
 @click.group()
@@ -57,7 +57,8 @@ def add_rule(config, topic, operator, equated):
 @ordinary.command('run', short_help='Run sentinel using a config file')
 @click.option('--config', '-c', required=True, type=click.Path())
 def start_run(config):
-    ALLOWED_OUTPUTS = {'output:mqtt': OutMQTT}
+    ALLOWED_OUTPUTS = {
+        'output:mqtt': OutMQTT, 'output:pushbullet': Pushbullet}
 
     cfg_parse = configparser.ConfigParser()
     cfg_parse.read(config)

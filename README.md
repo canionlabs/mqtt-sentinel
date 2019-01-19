@@ -6,47 +6,51 @@ Integration between MQTT and services using custom rules. Based on the awesome p
 
 #### Installation
 
-....
+```
+pip install mqtt-sentinel
+```
 
-### 1. Getting started
+### Getting started
 
-#### 1.1 Start using the cli
+#### 1. CLI
 
 ```
-# Creating rules
-# Call the output service when a value received in
-# the topic room/temperature is >= 30
+# Create a rule -t topic | -o operator | -e equated
 $ msentinel add -c your-conf.ini -t "room/temperature" -o ">=" -e "30"
 
 # Run the sentinel
 $ msentinel run -c your-conf.ini
 
-# Add rules, configure and run the sentinel using the interactive mode
-$ msentinel irun
-
 # More info
 $ msentinel --help
 ```
 
-**conf.ini structure**
+.ini structure
 ```ini
+; your-conf.ini
+
 [settings:mqtt]
 host      = localhost
 port      = 1883
 keepalive = 60
 
-# Optional
-# [settings:rules]
-# db_url = sqlite://sentinel.db
+;  Optional
+;  [settings:rules]
+; db_url = sqlite://sentinel.db
 
-[output:mqtt]
+[output:mqtt] ; Output Service
 host      = localhost
 port      = 1883
 keepalive = 60
 topic     = device123/broadcast/alarms
 ```
 
-#### 1.2 Start using the library with a simple application
+#### 1.1 Output Services
+
+- [MQTT](https://github.com/canionlabs/mqtt-sentinel/wiki/.ini-reference#mqtt)
+- [Pushbullet](https://github.com/canionlabs/mqtt-sentinel/wiki/.ini-reference#pushbullet)
+
+#### 2. Create applications using the library
 
 ```python
 # app.py

@@ -29,9 +29,9 @@ class Sentinel:
         ----------
         host : str, optional
             Reader Broker address
-        port : obj:`int`, optional
+        port : :obj:`int`, optional
             Reader Broker port
-        keepalive : obj:`int`, optional
+        keepalive : :obj:`int`, optional
             Reader Broker keepalive
 
         """
