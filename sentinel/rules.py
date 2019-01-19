@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 class Rule:
     """
     Rule Object used to represent DB Rules received from Database

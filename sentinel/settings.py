@@ -1,4 +1,5 @@
 # coding: utf-8
+
 class Singleton(type):
     """
     Based on https://sourcemaking.com/design_patterns/singleton/python/1

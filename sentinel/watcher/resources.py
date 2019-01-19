@@ -1,8 +1,8 @@
 # coding: utf-8
+import threading
+
 import paho.mqtt.client as paho_mqtt
 from sentinel import settings
-
-import threading
 
 
 def operation(value, operator, equated):

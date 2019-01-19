@@ -1,8 +1,8 @@
 # coding: utf-8
+import logging
+
 from .resources import WatcherPool
 from sentinel import settings
-
-import logging
 
 
 class Watcher:
