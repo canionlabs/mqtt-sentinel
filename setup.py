@@ -22,7 +22,7 @@ setup(name='mqtt-sentinel',
         'prompt_toolkit==1.0.14',
         'click==7.0',
         'colorama==0.4.1',
-        'requests==2.21.0'
+        'requests==2.31.0'
       ],
       long_description=long_description,
       long_description_content_type="text/markdown",
